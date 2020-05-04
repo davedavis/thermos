@@ -12,10 +12,18 @@ Thermos - Bookmark & Read Later
                             my attempt to learn Flask and try to build one of my backlogged projects. This big test will
                             come when the transfer to nginx happens as it's pretty confusing with venvs. </p>
                     </header>
-                    <section>
-                        <h2>Object passing section</h2>
-                        <p>This is just a plain HTML paragraph</p>
 
+                    <section>
+                        <h2>Recently Added Bookmarks</h2>
+                        {% if new_bookmarks %}
+                            <ul>
+                                {% for bm in new_bookmarks %}
+                                <li>{{ bm.user }} added <a href="{{ bm.url }}">{{ bm.url }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            No bookmarks yet!
+                        {% endif %}
 
                     </section>
                     <footer>

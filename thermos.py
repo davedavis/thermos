@@ -1,10 +1,8 @@
-
 from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '\x83\xbf\x94\x19\x91\xd9:\x9a\x82\x12K\xbc\xa2\xc1f\xde\xc9\xbb\xa7\x82\xdd\t\xbb\xc7'
-
 
 bookmarks = []
 
@@ -17,10 +15,14 @@ def store_bookmarks(url):
     ))
 
 
+def new_bookmarks(num):
+    return sorted(bookmarks, key=lambda bm: bm['date'], reverse=True)[:num]
+
+
 @app.route('/')
 # @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', new_bookmarks=new_bookmarks(5))
 
 
 @app.route('/add', methods=['GET', 'POST'])
