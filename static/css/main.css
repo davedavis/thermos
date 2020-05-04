@@ -155,7 +155,16 @@ nav a:hover {
    ========================================================================== */
 
 
+.flashes ul {
+    margin: 0 0;
+    background: yellow;
+    color: black;
+    list-style: none none;
+}
 
+article.flashes {
+    margin-bottom: 1em;
+}
 
 
 
