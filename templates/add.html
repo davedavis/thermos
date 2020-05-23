@@ -9,13 +9,30 @@ Add a URL
 <section>
     <h1>Add a URL to your Bookmarks</h1>
         <form action="" method="post" >
-        <p>
-            Please enter your bookmark here!
-            <input type="text" name="url">
-        </p>
-        <p>
-            <button type="submit">Submit</button>
-        </p>
+            {{ form.hidden_tag() }}
+            <table>
+                <tr>
+                    <td>Please enter your bookmark</td>
+                    <td>{{ form.url(size = 50) }}</td>
+                </tr>
+                <tr>
+                    <td>Please enter a description</td>
+                    <td>{{ form.description(size = 50) }}</td>
+                </tr>
+                    <td></td>
+                    <td>
+                        <button type="submit">Submit</button>
+                    </td>
+                            </table>
+
+
+{#        <p>#}
+{#            Please enter your bookmark here!#}
+{#            <input type="text" name="url">#}
+{#        </p>#}
+{#        <p>#}
+{#            <button type="submit">Submit</button>#}
+{#        </p>#}
 
     </form>
 </section>
