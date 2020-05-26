@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% from "form_macros.html" import render_field %}
 {% block title %}
 Add a URL
 {% endblock %}
@@ -11,30 +11,14 @@ Add a URL
         <form action="" method="post" >
             {{ form.hidden_tag() }}
             <table>
-                <tr>
-                    <td>Please enter your bookmark</td>
-                    <td>{{ form.url(size = 50) }}</td>
-                </tr>
-                <tr>
-                    <td>Please enter a description</td>
-                    <td>{{ form.description(size = 50) }}</td>
-                </tr>
+                {{ render_field(form.url, size=50) }}
+                {{ render_field(form.description, size=50) }}
+                <tr class="submit">
                     <td></td>
-                    <td>
-                        <button type="submit">Submit</button>
-                    </td>
-                            </table>
-
-
-{#        <p>#}
-{#            Please enter your bookmark here!#}
-{#            <input type="text" name="url">#}
-{#        </p>#}
-{#        <p>#}
-{#            <button type="submit">Submit</button>#}
-{#        </p>#}
-
-    </form>
+                    <td><button type="submit">Submit</button></td>
+                </tr>
+            </table>
+        </form>
 </section>
 {% endblock %}
 

@@ -6,32 +6,32 @@ Thermos - Bookmark & Read Later
 
 {% block content %}
  <article>
-                    <header>
-                        <h1>Welcome to Thermos</h1>
-                        <p>Thermos is Dave's bookmarking tool. It's just a test and is not for production. This is just
-                            my attempt to learn Flask and try to build one of my backlogged projects. This big test will
-                            come when the transfer to nginx happens as it's pretty confusing with venvs. </p>
-                    </header>
+    <header>
+        <h1>Welcome to Thermos.ie</h1>
+        <p>Thermos is Dave's bookmarking tool. It's just a test and is not for production. This is just
+            my attempt to learn Flask and try to build one of my backlogged projects. This big test will
+            come when the transfer to nginx happens as it's pretty confusing with venvs.
+        </p>
+    </header>
 
-                    <section>
-                        <h2>Recently Added Bookmarks</h2>
-                        {% if new_bookmarks %}
-                            <ul>
-                                {% for bm in new_bookmarks %}
-                                <li>{{ bm.user }} added <a href="{{ bm.url }}">{{ bm.url }}</a></li>
-                                {% endfor %}
-                            </ul>
-                            {% else %}
-                            You haven't added anything yet!
-                        {% endif %}
+    <section>
+        <h2>Recently Added Bookmarks</h2>
+        {% if new_bookmarks %}
+            <ul>
+                {% for bm in new_bookmarks %}
+                <li>{{ bm.user }} added <a href="{{ bm.url }}">{{ bm.url }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            You haven't added anything yet!
+        {% endif %}
+    </section>
 
-                    </section>
-                    <footer>
-                        <h3>Learn more by signing up</h3>
-                        <p>Eventually, this will be used to implement a singup, login or anonymous bookmark signup but
-                            I don't expect any users. This is for me. I'd like to include oAuth signup and sync. I might
-                            also use this section to include :ToDo items to keep them fresh in my mind. .</p>
-                    </footer>
-                </article>
-
+    <footer>
+        <h3>Learn more by signing up</h3>
+        <p>Eventually, this will be used to implement a singup, login or anonymous bookmark signup but
+            I don't expect any users. This is for me. I'd like to include oAuth signup and sync. I might
+            also use this section to include :ToDo items to keep them fresh in my mind. .</p>
+    </footer>
+ </article>
 {% endblock %}

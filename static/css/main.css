@@ -166,7 +166,26 @@ article.flashes {
     margin-bottom: 1em;
 }
 
+.error, .error input {
+    color: red;
+}
 
+tr.error td ul {
+    margin-top: 0;
+}
+
+tr.submit button {
+    margin-top: 10px;
+}
+
+input, button {
+    margin-left: 20px;
+
+}
+
+body > div.main-container > div > section > form > table > tbody > tr:nth-child(5) > td:nth-child(2) > button {
+    margin-top: 10px;
+}
 
 
 
