@@ -1,3 +1,7 @@
+{# This is a macro for rendering individual fields rather than entire forms. In case they need to be reused. #}
+{# Not really needed for this app, but I wanted to see how they worked. #}
+
+
 {% macro render_field(field) %}
     <tr {% if field.errors %} class="error" {% endif %}>
         <td>{{ field.label }}</td>
