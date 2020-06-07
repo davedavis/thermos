@@ -20,7 +20,11 @@
                     <ul>
                         <li><a href="{{ url_for('add') }}">Add URL</a></li>
                         <li><a href="#">Sign Up</a></li>
-                        <li><a href="#">Sign In</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+                         {% else %}
+                            <li><a href="{{ url_for('login') }}">Sign In</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </header>

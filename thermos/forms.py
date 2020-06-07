@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 
 from wtforms.fields.html5 import URLField
 from wtforms.validators import DataRequired, url
-from wtforms.fields.core import StringField
+# from wtforms.fields.core import StringField                               // Delete if no issues.
+from wtforms import PasswordField, BooleanField, SubmitField, StringField
 
 
 # Class that uses the FlaskForm WTF class and and creates a simple form with two fields.
@@ -22,3 +23,10 @@ class BookmarkForm(FlaskForm):
             self.description.data = self.url.data
 
         return True
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Your Username:', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Keep me logged in')
+    submit = SubmitField('Log in')
