@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import login_required, login_user, logout_user, current_user
 
-from thermos.forms import BookmarkForm, LoginForm
+from thermos.forms import BookmarkForm, LoginForm, SignupForm
 from thermos import app, db, login_manager
 from thermos.models import User, Bookmark
 
@@ -44,15 +44,29 @@ def login():
     # Validate the form, store the bookmarks and redirect to the index.
     if form.validate_on_submit():
         # Login and validate the user
-        user = User.query.filter_by(username = form.username.data).first()
-        if user is not None:
-            # Pass the user object and remember_me flag and register it with Flask-Login
+        user = User.get_by_username(form.username.data)
+        if user is not None and user.check_password(form.password.data):
             login_user(user, form.remember_me.data)
             flash("Logged in successfully as {}.".format(user.username))
             # Redirect to the index page or the page the user was trying to access pulled from the next arg.
-            return redirect(request.args.get('next') or url_for('index'))
+            return redirect(request.args.get('next') or url_for('user', username=user.username))
         flash("Sorry, incorrect username or password. Please try again.")
     return render_template('login.html', form=form)
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+    if form.validate_on_submit():
+        # ToDo: Change user variable names so there's no warning. Even though they're scope safe.
+        new_user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Welcome to Thermos {}! Please login with the details you provided".format(user.username))
+        return redirect(url_for('login'))
+    return render_template('signup.html', form=form)
 
 
 @app.route('/user/<username>')
