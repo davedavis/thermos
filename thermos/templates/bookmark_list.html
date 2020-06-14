@@ -12,9 +12,14 @@
              </a>
                 <div class="info">
                     Added by <a href="{{ url_for('user', username=bookmark.user.username) }}">{{ bookmark.user.username }}</a>
-                    {{ moment(bookmark.date).fromNow() }}.
+                    {{ moment(bookmark.date).fromNow(refresh = True) }}.
+                    {% if current_user == bookmark.user %}
+                        <span class="editlinks">
+                            <a href="{{ url_for('edit_bookmark', bookmark_id=bookmark.id) }}">Edit</a>
+                        </span>
+                    {%  endif %}
                 </div>
-        <hr>
+            <hr>
         </li>
     {% endfor %}
 </ul>

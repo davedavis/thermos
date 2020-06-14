@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, abort
 from flask_login import login_required, login_user, logout_user, current_user
 
 from thermos.forms import BookmarkForm, LoginForm, SignupForm
@@ -34,7 +34,29 @@ def add():
         flash("Stored '{}'".format(description))
         return redirect(url_for('index'))
     # Render the add template giving it the empty form object.
-    return render_template('add.html', form=form)
+    return render_template('bookmark_form.html', form=form)
+
+
+@app.route('/edit/<int:bookmark_id>', methods=['GET', 'POST'])
+@login_required
+def edit_bookmark(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    if current_user != bookmark.user:
+        abort(403)
+    form = BookmarkForm(obj=bookmark)
+    if form.validate_on_submit():
+        form.populate_obj(bookmark)
+        db.session.commit()
+        flash("Stored '{}'".format(bookmark.description))
+        # return render_template(url_for('user', username=current_user.username))
+        return render_template('user.html', user=current_user)
+    return render_template('bookmark_form.html', form=form, title='Edit Bookmark')
+
+
+@app.route('/user/<username>')
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -61,19 +83,13 @@ def signup():
     if form.validate_on_submit():
         # ToDo: Change user variable names so there's no warning. Even though they're scope safe.
         new_user = User(email=form.email.data,
-                    username=form.username.data,
-                    password=form.password.data)
+                        username=form.username.data,
+                        password=form.password.data)
         db.session.add(new_user)
         db.session.commit()
         flash("Welcome to Thermos {}! Please login with the details you provided".format(user.username))
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
-
-
-@app.route('/user/<username>')
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
 
 
 @app.route('/logout')
@@ -96,6 +112,11 @@ def server_error(e):
 @app.errorhandler(405)
 def method_not_allowed(e):
     return render_template('405.html'), 405
+
+
+@app.errorhandler(403)
+def not_authorized(e):
+    return render_template('403.html'), 403
 
 
 if __name__ == '__main__':
