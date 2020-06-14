@@ -27,3 +27,8 @@ def dropdb():
 
 if __name__ == '__main__':
     manager.run()
+
+
+# As per: https://github.com/cburmeister/flask-bones
+# from thermos import create_app, config
+# app = create_app(config.dev_config)

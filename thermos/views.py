@@ -44,12 +44,13 @@ def login():
     # Validate the form, store the bookmarks and redirect to the index.
     if form.validate_on_submit():
         # Login and validate the user
-        user = User.get_by_username(form.username.data)
-        if user is not None and user.check_password(form.password.data):
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is not None:
+            # Pass the user object and remember_me flag and register it with Flask-Login
             login_user(user, form.remember_me.data)
             flash("Logged in successfully as {}.".format(user.username))
             # Redirect to the index page or the page the user was trying to access pulled from the next arg.
-            return redirect(request.args.get('next') or url_for('user', username=user.username))
+            return redirect(request.args.get('next') or url_for('index'))
         flash("Sorry, incorrect username or password. Please try again.")
     return render_template('login.html', form=form)
 

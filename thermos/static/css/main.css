@@ -154,7 +154,15 @@ nav a:hover {
    Author's custom styles
    ========================================================================== */
 
+a,
+a:visited {
+    color: #1E5373;
+}
+a:hover, aside a:hover, aside a:visited:hover {
+    color: #D39447;
+}
 
+/* flashes styling */
 .flashes ul {
     margin: 0 0;
     background: yellow;
@@ -166,9 +174,16 @@ article.flashes {
     margin-bottom: 1em;
 }
 
+/* fix form layout with flashes */
+section {
+    clear: left;
+}
+
 .error, .error input {
     color: red;
 }
+
+/* WT-Forms validation CSS */
 
 tr.error td ul {
     margin-top: 0;
@@ -188,7 +203,63 @@ body > div.main-container > div > section > form > table > tbody > tr:nth-child(
 }
 
 
+/* bookmark list styling */
+ul.bookmarks {
+    list-style: none none;
+    padding-left: 0;
+}
 
+.bookmark {
+    padding-bottom: .5em;
+    border-top: 1px solid #7EA6BF;
+
+}
+
+a.header {
+    color: #326786;
+    text-decoration: none;
+    display: block;
+}
+
+a.header h3 {
+    margin: 0 0;
+}
+
+div.info {
+    font-size: .95em;
+    color: #666666;
+}
+
+span.editlinks {
+    float: right;
+}
+
+.error, .error input {
+    color: red;
+}
+
+tr.error td ul {
+    margin-top: 0;
+}
+
+tr.submit button {
+    margin-top: 20px;
+}
+
+input, textarea,
+div.select2-container {
+    width:100%;
+}
+
+input[type="checkbox"],
+input[type="submit"] {
+    width: auto;
+}
+
+input, button, textarea,
+div.select2-container {
+    margin-left: 10px;
+}
 
 
 

@@ -12,19 +12,16 @@ Thermos - Bookmark & Read Later
             my attempt to learn Flask and try to build one of my backlogged projects. This big test will
             come when the transfer to nginx happens as it's pretty confusing with venvs.
         </p>
+        <p>Don't have an account? Create one by <a href="{{ url_for('signup') }}">Signing up</a></p>
     </header>
 
     <section>
         <h2>Recently Added Bookmarks</h2>
-        {% if new_bookmarks %}
-            <ul>
-                {% for bm in new_bookmarks %}
-                <li>
-                    <a href='{{ url_for('user', username=bm.user.username) }}'>{{ bm.user.username }}</a> added <a href="{{ bm.url }}">{{ bm.description }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
+        {% if new_bookmarks.count() > 0 %}
+            {% with bookmarks = new_bookmarks %}
+                {% include "bookmark_list.html" %}
+            {% endwith %}
+        {% else %}
             You haven't added anything yet!
         {% endif %}
     </section>
