@@ -6,7 +6,6 @@ from thermos import db
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-
 # This needs to be added to work on the command line, avoiding the redefining of models.
 # db.metadata.clear()
 
@@ -39,6 +38,27 @@ class Bookmark(db.Model):
     @staticmethod
     def newest(num):
         return Bookmark.query.order_by(desc(Bookmark.date)).limit(num)
+
+    # In the view and the form, we handle the list of tags as a comma separated string. So it's convenient to create a
+    # tag property that provides a list of strings as well. The getter takes the contents of the _tags list which holds
+    # actual Tag model objects. Then it takes the name from each and joins it into a string. So when we ask for the
+    # value of the tags property on a bookmark, we get a string, with a list of tag names.
+    @property
+    def tags(self):
+        return ",".join([t.name for t in self._tags])
+
+    # When we pass a string with a list of tags to be set to this property, we need to find out for each of those tags
+    # whether it already exists in the database. If it doesn't, we need to insert a new tag into the tag table and then
+    # add the new model object to the tag list for this bookmark. If it does exist, we can simply retrieve it and put it
+    # in the list. So if it exists, we create a new method get_or_create that takes the name of a tag and returns a tag
+    # model instance by either creating or retrieving a tag with that name. We then do a for loop over all the words in
+    # the string we received and then call the method on each of those words. The resulting list is a list of tag model
+    # objects and we can assign that to the _tags attribute. Assigning a list of tag objects is all we have to do and
+    # SQLAlchemy will take it from there and create all the relevant rows in the database.
+    @tags.setter
+    def tags(self, string):
+        if string:
+            self._tags = [Tag.get_or_create(name) for name in string.split(',')]
 
     def __repr__(self):
         return "Bookmark '{}': '{}'>".format(self.description, self.url)
@@ -75,6 +95,20 @@ class User(db.Model, UserMixin):
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True, index=True)
+
+    # Get_or_create uses a Try statement to retrieve a tag with a given name. If that throws an exception (tag doesn't
+    # exist), we create a new tag and return that. So this way, we can convert strings to tags and back.
+    # ToDo: Fix Exception warning
+    @staticmethod
+    def get_or_create(name):
+        try:
+            return Tag.query.filter_by(name=name).one()
+        except:
+            return Tag(name=name)
+
+    @staticmethod
+    def all():
+        return Tag.query.all()
 
     def __repr__(self):
         return self.name

@@ -3,7 +3,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 
 from thermos.forms import BookmarkForm, LoginForm, SignupForm
 from thermos import app, db, login_manager
-from thermos.models import User, Bookmark
+from thermos.models import User, Bookmark, Tag
 
 
 # Flask-Login user loader (load_user implementation). Needs to return a user object given an ID in each session.
@@ -28,7 +28,10 @@ def add():
     if form.validate_on_submit():
         url = form.url.data
         description = form.description.data
-        bm = Bookmark(user=current_user, url=url, description=description)
+        tags = form.tags.data
+        # What we're passing to the model here in the tag parameter is just a comma separated list of words.
+        # As that's all the HTML input receives in the form.
+        bm = Bookmark(user=current_user, url=url, description=description, tags=tags)
         db.session.add(bm)
         db.session.commit()
         flash("Stored '{}'".format(description))
@@ -45,6 +48,7 @@ def edit_bookmark(bookmark_id):
         abort(403)
     form = BookmarkForm(obj=bookmark)
     if form.validate_on_submit():
+        # Magic method provided by flask that copies the form data automatically, so no need to define tags.
         form.populate_obj(bookmark)
         db.session.commit()
         flash("Stored '{}'".format(bookmark.description))
