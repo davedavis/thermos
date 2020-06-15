@@ -87,7 +87,7 @@ def signup():
                         password=form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        flash("Welcome to Thermos {}! Please login with the details you provided".format(user.username))
+        flash("Welcome to Thermos {}! Please login with the details you provided".format(new_user.username))
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
 
