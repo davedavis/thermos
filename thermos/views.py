@@ -109,6 +109,22 @@ def tag(name):
     return render_template('tag.html', tag=tag)
 
 
+@app.route('/delete/<int:bookmark_id>', methods=['GET', 'POST'])
+@login_required
+def delete_bookmark(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    if current_user != bookmark.user:
+        abort(403)
+    if request.method == 'POST':
+        db.session.delete(bookmark)
+        db.session.commit()
+        flash("Deleted '{}'".format(bookmark.description))
+        return redirect(url_for('user', username=current_user.username))
+    else:
+        flash('Are you extra sure you want to delete this?')
+    return render_template('confirm_delete.html', bookmark=bookmark, nolinks=True)
+
+
 # Error handling.
 @app.errorhandler(404)
 def page_not_found(e):
