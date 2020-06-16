@@ -106,6 +106,7 @@ class Tag(db.Model):
         except:
             return Tag(name=name)
 
+    # To use with the context processor all_tags() method, allowing all tags to accessible from all template contexts.
     @staticmethod
     def all():
         return Tag.query.all()

@@ -15,7 +15,7 @@
                     <span class="tags">
                         {% if bookmark.tags %}
                             {% for t in bookmark._tags %}
-                                <a href="#">{{ t }}</a>
+                                <a href="{{ url_for('tag', name = t) }}">{{ t }}</a>
                             {% endfor %}
                         {% else %}No Tags
                         {% endif %}

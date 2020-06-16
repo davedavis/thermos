@@ -6,8 +6,12 @@
         <meta name="description" content="This is a basic project, to build a read it later bookmarking service similar to Instapaper">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {% block styles %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {% endblock %}
+{#        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">#}
+{#        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">#}
         <script src="{{ url_for('static', filename='js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
     </head>
     <body>
@@ -51,10 +55,10 @@
 
                 {% block sidebar %}
                 <aside>
-                    <h3>Bookmarks</h3>
-                    <p>This section was included with initializr, not sure if I'll switch to bootstrap yet. I expect
-                        that this will show most recent bookmarks or categories. Eventually, if an API exists, it can
-                        have a REST endpoint so I can use it for my Android project.</p>
+                    <h3>Tags</h3>
+                    {% for t in all_tags() %}
+                        <a href="{{ url_for('tag', name=t) }}">{{ t }}</a>
+                    {%  endfor %}
                 </aside>
                 {% endblock %}
 
@@ -70,7 +74,10 @@
         {{ moment.include_jquery() }}
         {{ moment.include_moment() }}
 
-        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        {% block scripts %}
+        {% endblock %}
+
+{#        <script src="{{ url_for('static', filename='js/main.js') }}"></script>#}
 
     </body>
 </html>

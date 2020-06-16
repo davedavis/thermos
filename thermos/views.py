@@ -102,6 +102,13 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/tag/<name>')
+def tag(name):
+    # Try to retrieve a tag by that name. Then pass back the Tag model object we just got from the DB.
+    tag = Tag.query.filter_by(name=name).first_or_404()
+    return render_template('tag.html', tag=tag)
+
+
 # Error handling.
 @app.errorhandler(404)
 def page_not_found(e):
@@ -121,6 +128,11 @@ def method_not_allowed(e):
 @app.errorhandler(403)
 def not_authorized(e):
     return render_template('403.html'), 403
+
+
+@app.context_processor
+def inject_tags():
+    return dict(all_tags=Tag.all)
 
 
 if __name__ == '__main__':
