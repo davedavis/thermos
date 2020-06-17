@@ -33,7 +33,7 @@ class Bookmark(db.Model):
     # So each tag will get a bookmarks attribute containing a list of the associated bookmarks. Dynamic loading in case
     # there are a large number of bookmarks associated with each tag.
     # Underscore as I don't want to access this directly from other classes.
-    _tags = db.relationship('Tag', secondary=tags, backref=db.backref('bookmarks', lazy='dynamic'))
+    _tags = db.relationship('Tag', secondary=tags, lazy='joined', backref=db.backref('bookmarks', lazy='dynamic'))
 
     @staticmethod
     def newest(num):

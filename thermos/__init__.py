@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_moment import Moment
+from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 
@@ -25,6 +26,13 @@ login_manager.init_app(app)
 
 # Init the moment extension
 moment = Moment(app)
+
+# Init the debug toolbar
+toolbar = DebugToolbarExtension(app)
+# Turn on the Flask-Debug profiler
+# app.config['DEBUG_TB_PROFILER_ENABLED'] = True
+# Enable redirects through the toolbar.
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 # Needs to go at the end to avoid circular import issues.
 # import thermos.models
