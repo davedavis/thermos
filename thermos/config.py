@@ -21,11 +21,11 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://thermos:thermosdev@localhost/thermosdev'
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+    # SQLALCHEMY_DATABASE_URI = 'mysql://thermos:thermosdev@localhost/thermosdev'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
     # Need to disable CSRF protection when running unit tests.
     WTF_CSRF_ENABLED = False
-    SERVER_NAME = "localhost"
+    SERVER_NAME = "localhost.localdomain"
 
 
 class ProductionConfig(Config):

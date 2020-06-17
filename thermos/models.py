@@ -57,8 +57,12 @@ class Bookmark(db.Model):
     # SQLAlchemy will take it from there and create all the relevant rows in the database.
     @tags.setter
     def tags(self, string):
+        # Check if the tags are a string
         if string:
             self._tags = [Tag.get_or_create(name) for name in string.split(',')]
+        # If not, set the list ot an empty list, otherwise, it will always fail the test.
+        else:
+            self._tags = []
 
     def __repr__(self):
         return "Bookmark '{}': '{}'>".format(self.description, self.url)
