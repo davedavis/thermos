@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Regexp, EqualTo, Email, ValidationError
 
+from ..models import User
+
 
 class LoginForm(FlaskForm):
     username = StringField('Your Username:', validators=[DataRequired()])
@@ -14,7 +16,8 @@ class SignupForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),
                                                    Length(3, 80),
                                                    Regexp('^[A-Za-z0-9_]{3,}$',
-                                                          message="Usernames can only be letters, numbers or underscores")])
+                                                          message="Usernames can only be letters, numbers or "
+                                                                  "underscores")])
     password = PasswordField('Password', validators=[DataRequired(),
                                                      Length(4, 99),
                                                      EqualTo('password2', message="Passwords must match")])

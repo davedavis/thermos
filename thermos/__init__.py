@@ -1,44 +1,56 @@
+# Project Structure
+# Models, Templates and Static files are all thermos package/root level.
+# Functionality is broken down into views and forms in relevant package level blueprints.
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_moment import Moment
 from flask_debugtoolbar import DebugToolbarExtension
 
-app = Flask(__name__)
-
-# App setup
-# Store it in the apps config dict. This is needed for the flash function and and to access the session object.
-app.config['SECRET_KEY'] = '\x83\xbf\x94\x19\x91\xd9:\x9a\x82\x12K\xbc\xa2\xc1f\xde\xc9\xbb\xa7\x82\xdd\t\xbb\xc7'
+# Import the config dictionary.
+from .config import config_by_name
 
 # SQLAlchemy setup.
 # Suppress the annoying deprecation warning in the console.
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# Local testing so it's OK for this to be on GitHub.
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://thermos:thermosdev@localhost/thermosdev'
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# # Local testing so it's OK for this to be on GitHub.
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://thermos:thermosdev@localhost/thermosdev'
+db = SQLAlchemy()
 
-
-# Login/Authentication setup
+# Login/Authentication configuration setup
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "auth.login"
-login_manager.init_app(app)
 
-# Init the moment extension
-moment = Moment(app)
+# Create a Moment instance
+moment = Moment()
 
-# Register blueprints.
-from .auth import auth as auth_blueprint
-app.register_blueprint(auth_blueprint, url_prefix='/auth')
+# Create a DebugToolBar instance.
+toolbar = DebugToolbarExtension()
 
-# Init the debug toolbar
-toolbar = DebugToolbarExtension(app)
-# Turn on the Flask-Debug profiler
-# app.config['DEBUG_TB_PROFILER_ENABLED'] = True
-# Enable redirects through the toolbar.
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-# Needs to go at the end to avoid circular import issues.
-# import thermos.models
-import thermos.views
+# App factory function
+def create_app(config_name):
+    app = Flask(__name__)
+    # Currently hardcoding the development configuration in as there's no deployment yet.
+    # See https://github.com/cburmeister/flask-bones for more details on alternatives.
+    # app.config.from_object(config_by_name[config_name])
+    app.config.from_object(config.DevelopmentConfig)
+    db.init_app(app)
+    login_manager.init_app(app)
+    moment.init_app(app)
+    toolbar.init_app(app)
 
+    # Register blueprints. Do them here because some of them might depend on the db or login_manager when loading. So
+    # we want to make sure that we don't load these modules before we have set up the entire application, including the
+    # extensions.
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint, url_prefix='/')
+
+    from .bookmarks import bookmarks as bookmarks_blueprint
+    app.register_blueprint(bookmarks_blueprint, url_prefix='/bookmarks')
+
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    return app

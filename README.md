@@ -21,3 +21,5 @@ $ sudo apt-get install gcc
 pip install mysqlclient 
 
 pip install email_validator
+
+Added a requirements.txt file. 
