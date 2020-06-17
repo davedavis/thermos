@@ -21,11 +21,15 @@ db = SQLAlchemy(app)
 # Login/Authentication setup
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
-login_manager.login_view = "login"
+login_manager.login_view = "auth.login"
 login_manager.init_app(app)
 
 # Init the moment extension
 moment = Moment(app)
+
+# Register blueprints.
+from .auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
 # Init the debug toolbar
 toolbar = DebugToolbarExtension(app)
